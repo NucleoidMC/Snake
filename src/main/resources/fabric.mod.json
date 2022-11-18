@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "snake",
+	"version": "${version}",
+
+	"name": "Snake",
+	"description": "A multiplayer snake minigame.",
+	"authors": [
+		"Pufferfish"
+	],
+
+	"license": "MIT",
+
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.puffish.snakemod.SnakeMod"
+		]
+	},
+
+	"depends": {
+		"fabricloader": ">=0.14.9",
+		"fabric-api": "*",
+		"minecraft": "~1.19",
+		"plasmid": "*",
+		"java": ">=17"
+	}
+}

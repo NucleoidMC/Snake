@@ -1,0 +1,18 @@
+{
+	"gameType.snake.snake": "Snake",
+
+	"text.snake.eliminated": "%s§3 has been eliminated!",
+	"text.snake.eliminated.by": "%s§3 has been eliminated by %s§3!",
+	"text.snake.won": "%s§9 has won the game!",
+
+	"text.snake.countdown.3": "§d§l3",
+	"text.snake.countdown.2": "§d§l2",
+	"text.snake.countdown.1": "§d§l1",
+	"text.snake.countdown.0": "§d§lGO",
+
+	"sidebar.snake.title": "§lSnake",
+	"sidebar.snake.alive": "§a§lAlive§r %s",
+	"sidebar.snake.dead": "§c§lDead§r %s",
+	"sidebar.snake.length": "§b§lLength§r %s",
+	"sidebar.snake.kills": "§e§lKills§r %s"
+}
