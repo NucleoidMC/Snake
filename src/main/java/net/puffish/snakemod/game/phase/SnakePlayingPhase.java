@@ -12,8 +12,11 @@ import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 
 public class SnakePlayingPhase extends SnakeActivePhase {
-	protected SnakePlayingPhase(GameSpace gameSpace, ServerWorld world, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager) {
+	private final int minAliveCount;
+
+	public SnakePlayingPhase(GameSpace gameSpace, ServerWorld world, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager, int minAliveCount) {
 		super(gameSpace, world, map, snakeManager, foodManager, scoreboardManager);
+		this.minAliveCount = minAliveCount;
 	}
 
 	public static SnakePlayingPhase create(GameSpace gameSpace, SnakeActivePhase oldPhase) {
@@ -23,7 +26,8 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 				oldPhase.map,
 				oldPhase.snakeManager,
 				oldPhase.foodManager,
-				oldPhase.scoreboardManager
+				oldPhase.scoreboardManager,
+				oldPhase.snakeManager.getSnakes().size() == 1 ? 1 : 2
 		);
 	}
 
@@ -49,7 +53,7 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 
 		super.tick();
 
-		if (snakeManager.getAliveCount() <= (snakeManager.getSnakes().size() == 1 ? 0 : 1)) {
+		if (snakeManager.getAliveCount() < minAliveCount) {
 			SnakeEndingPhase.open(this);
 		}
 	}

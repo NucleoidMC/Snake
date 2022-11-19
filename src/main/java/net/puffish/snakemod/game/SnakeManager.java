@@ -51,7 +51,7 @@ public class SnakeManager {
 	}
 
 	public void removePlayer(ServerPlayerEntity player) {
-		snakes.remove(player);
+		Optional.ofNullable(snakes.remove(player)).ifPresent(SnakePlayer::remove);
 	}
 
 	public int getAliveCount() {

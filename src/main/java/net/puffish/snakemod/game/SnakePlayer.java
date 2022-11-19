@@ -174,6 +174,12 @@ public class SnakePlayer {
 		this.dead = true;
 	}
 
+	public void remove(){
+		for (var entity : entities) {
+			entity.remove(Entity.RemovalReason.DISCARDED);
+		}
+	}
+
 	public void spawnFirework() {
 		var pos = getHeadPos();
 		var item = ItemStackBuilder.firework(color.getFireworkColor(), 1, FireworkRocketItem.Type.SMALL_BALL).build();
