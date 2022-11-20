@@ -7,9 +7,7 @@ import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
 import net.puffish.snakemod.game.map.SnakeMap;
-import xyz.nucleoid.plasmid.game.GameActivity;
 import xyz.nucleoid.plasmid.game.GameSpace;
-import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 
 public class SnakePlayingPhase extends SnakeActivePhase {
 	private final int minAliveCount;
@@ -40,16 +38,9 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 		});
 	}
 
-	@Override
-	public void applyListeners(GameActivity activity) {
-		super.applyListeners(activity);
-
-		activity.listen(GameActivityEvents.TICK, this::tick);
-	}
-
 	protected void tick() {
 		foodManager.tick(snakeManager.getSnakes());
-		snakeManager.tickPlaying(gameSpace.getPlayers(), this::eliminate);
+		snakeManager.tickPlaying(this::eliminate);
 
 		super.tick();
 

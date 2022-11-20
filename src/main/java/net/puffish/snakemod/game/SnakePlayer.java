@@ -3,8 +3,6 @@ package net.puffish.snakemod.game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.DyeColor;
@@ -13,7 +11,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.entity.SnakePartEntity;
-import xyz.nucleoid.plasmid.game.player.PlayerOps;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 import java.util.ArrayList;
@@ -64,7 +61,7 @@ public class SnakePlayer {
 		this.length++;
 	}
 
-	public void tick(PlayerOps playerOps, boolean move) {
+	public void tick(boolean move) {
 		if (dead) {
 			return;
 		}
@@ -125,9 +122,6 @@ public class SnakePlayer {
 
 		for(var entity : entities){
 			entity.updateSimpleMovement();
-
-			playerOps.sendPacket(new EntityPositionS2CPacket(entity));
-			playerOps.sendPacket(new EntityVelocityUpdateS2CPacket(entity));
 		}
 	}
 

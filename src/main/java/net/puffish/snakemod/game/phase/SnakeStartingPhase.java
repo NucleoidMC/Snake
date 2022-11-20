@@ -8,10 +8,8 @@ import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
 import net.puffish.snakemod.game.map.SnakeMap;
-import xyz.nucleoid.plasmid.game.GameActivity;
 import xyz.nucleoid.plasmid.game.GameSpace;
 import xyz.nucleoid.plasmid.game.common.widget.SidebarWidget;
-import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 
 import java.util.Random;
 
@@ -58,16 +56,9 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 		});
 	}
 
-	@Override
-	protected void applyListeners(GameActivity activity) {
-		super.applyListeners(activity);
-
-		activity.listen(GameActivityEvents.TICK, this::tick);
-	}
-
 	protected void tick() {
 		foodManager.tick(snakeManager.getSnakes());
-		snakeManager.tickStarting(gameSpace.getPlayers());
+		snakeManager.tickStarting();
 
 		super.tick();
 

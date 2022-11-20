@@ -38,6 +38,9 @@ public class SnakePartEntity extends SheepEntity {
 		y -= 0.16;
 
 		this.setVelocity(vel.x, y, vel.z);
+
+		this.velocityDirty = true;
+		this.velocityModified = true;
 	}
 
 	@Override

@@ -6,10 +6,8 @@ import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
 import net.puffish.snakemod.game.SnakePlayer;
 import net.puffish.snakemod.game.map.SnakeMap;
-import xyz.nucleoid.plasmid.game.GameActivity;
 import xyz.nucleoid.plasmid.game.GameCloseReason;
 import xyz.nucleoid.plasmid.game.GameSpace;
-import xyz.nucleoid.plasmid.game.event.GameActivityEvents;
 
 public class SnakeEndingPhase extends SnakeActivePhase {
 	private int countdown = 5 * 20;
@@ -38,13 +36,6 @@ public class SnakeEndingPhase extends SnakeActivePhase {
 		});
 	}
 
-	@Override
-	public void applyListeners(GameActivity activity) {
-		super.applyListeners(activity);
-
-		activity.listen(GameActivityEvents.TICK, this::tick);
-	}
-
 	protected void tick() {
 		if (countdown % 20 == 0 || countdown % 20 == 15) {
 			snakeManager.getSnakes()
@@ -54,7 +45,7 @@ public class SnakeEndingPhase extends SnakeActivePhase {
 		}
 
 		foodManager.tick(snakeManager.getSnakes());
-		snakeManager.tickPlaying(gameSpace.getPlayers(), (killer, killed) -> {});
+		snakeManager.tickPlaying((killer, killed) -> {});
 
 		super.tick();
 

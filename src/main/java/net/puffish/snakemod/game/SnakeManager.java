@@ -7,7 +7,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.DyeColor;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.map.SnakeMap;
-import xyz.nucleoid.plasmid.game.player.PlayerOps;
 
 import java.util.*;
 
@@ -41,13 +40,13 @@ public class SnakeManager {
 		return new SnakeManager(snakes);
 	}
 
-	public void tickStarting(PlayerOps playerOps) {
-		snakes.values().forEach(p -> p.tick(playerOps, false));
+	public void tickStarting() {
+		snakes.values().forEach(p -> p.tick(false));
 	}
 
-	public void tickPlaying(PlayerOps playerOps, EliminateCallback eliminateCallback) {
+	public void tickPlaying(EliminateCallback eliminateCallback) {
 		snakes.values().forEach(p -> p.checkCollisions(snakes.values(), eliminateCallback));
-		snakes.values().forEach(p -> p.tick(playerOps, true));
+		snakes.values().forEach(p -> p.tick(true));
 	}
 
 	public void removePlayer(ServerPlayerEntity player) {

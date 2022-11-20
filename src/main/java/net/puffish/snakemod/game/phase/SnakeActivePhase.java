@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameMode;
 import net.puffish.snakemod.SnakeMod;
+import net.puffish.snakemod.event.SnakeEvents;
 import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
@@ -35,6 +36,7 @@ public abstract class SnakeActivePhase extends SnakePhase {
 		activity.listen(GamePlayerEvents.LEAVE, this::leavePlayer);
 		activity.listen(GamePlayerEvents.ADD, this::addPlayer);
 		activity.listen(GamePlayerEvents.REMOVE, this::removePlayer);
+		activity.listen(SnakeEvents.TICK_START, this::tick);
 	}
 
 	protected void tick() {
