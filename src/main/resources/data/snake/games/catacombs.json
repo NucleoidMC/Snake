@@ -1,0 +1,11 @@
+{
+	"type": "snake:snake",
+	"map": {
+		"id": "snake:catacombs"
+	},
+	"players": {
+		"min": 1,
+		"max": 8,
+		"threshold": 4
+	}
+}
