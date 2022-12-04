@@ -1,6 +1,7 @@
 package net.puffish.snakemod.game.phase;
 
 import net.minecraft.server.world.ServerWorld;
+import net.puffish.snakemod.SnakeMod;
 import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
@@ -33,7 +34,23 @@ public class SnakeEndingPhase extends SnakeActivePhase {
 
 			phase.applyRules(activity);
 			phase.applyListeners(activity);
+
+			phase.start();
 		});
+	}
+
+	private void start(){
+		snakeManager.getSnakes()
+				.stream()
+				.filter(SnakePlayer::isAlive)
+				.findFirst()
+				.ifPresent(winner -> gameSpace.getPlayers().sendMessage(
+						SnakeMod.createTranslatable(
+								"text",
+								"won",
+								winner.getPlayer().getDisplayName()
+						)
+				));
 	}
 
 	protected void tick() {

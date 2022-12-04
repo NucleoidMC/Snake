@@ -200,6 +200,10 @@ public class SnakePlayer {
 		return spawnPart(entity);
 	}
 
+	public ServerPlayerEntity getPlayer() {
+		return player;
+	}
+
 	public boolean isDead() {
 		return dead;
 	}
