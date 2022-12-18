@@ -9,7 +9,6 @@ import net.puffish.snakemod.game.ScoreboardManager;
 import net.puffish.snakemod.game.SnakeManager;
 import net.puffish.snakemod.game.map.SnakeMap;
 import xyz.nucleoid.plasmid.game.GameSpace;
-import xyz.nucleoid.plasmid.game.common.widget.SidebarWidget;
 
 import java.util.Random;
 
@@ -33,9 +32,6 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 		var snakeManager = SnakeManager.create(world, players, map, random);
 		var foodManager = FoodManager.create(world, map, random, 0.01f);
 		var scoreboardManager = ScoreboardManager.create();
-
-		var sidebar = new SidebarWidget();
-		players.forEach(sidebar::addPlayer);
 
 		return new SnakeStartingPhase(
 				gameSpace,
@@ -68,7 +64,7 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 			int seconds = countdown / 20;
 			if (seconds <= 3) {
 				players.showTitle(SnakeMod.createTranslatable("text", "countdown." + seconds), 10, 20, 10);
-				players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1.0f, seconds == 0 ? 2.0f : 1.0f);
+				players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), SoundCategory.PLAYERS, 1.0f, seconds == 0 ? 2.0f : 1.0f);
 			}
 			if (seconds == 0) {
 				SnakePlayingPhase.open(this);

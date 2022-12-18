@@ -19,7 +19,7 @@ public class SnakeFoodEntity extends SlimeEntity {
 	}
 
 	protected void init(){
-		this.goalSelector.clear();
+		this.goalSelector.getGoals().clear();
 		this.setInvulnerable(true);
 		this.setAiDisabled(true);
 		this.setPersistent();
