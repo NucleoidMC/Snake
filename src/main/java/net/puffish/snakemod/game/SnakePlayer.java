@@ -19,8 +19,8 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 public class SnakePlayer {
-	private static final int SEPARATION = 2;
-	private static final double SPEED = 25.0 / 36.0;
+	private static final int SEPARATION = 3;
+	private static final double SPEED = 5.0 / 9.0;
 
 	private final ServerWorld world;
 	private final ServerPlayerEntity player;
