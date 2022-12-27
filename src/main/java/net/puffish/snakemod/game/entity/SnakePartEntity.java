@@ -31,16 +31,15 @@ public class SnakePartEntity extends SheepEntity {
 
 		Vec3d vel = this.getVelocity();
 
-		double y = vel.y;
+		double velY = vel.y;
 		if (this.horizontalCollision && this.isClimbing()) {
-			y = 0.2;
+			velY = 0.2;
 		}
-		y -= 0.16;
+		velY -= 0.16;
 
-		this.setVelocity(vel.x, y, vel.z);
+		this.setVelocity(vel.x, velY, vel.z);
 
 		this.velocityDirty = true;
-		this.velocityModified = true;
 	}
 
 	@Override
