@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.puffish.snakemod.game.entity.SnakeFoodEntity;
 import net.puffish.snakemod.game.entity.SnakePartEntity;
@@ -39,7 +40,7 @@ public class FoodManager {
 					bounds.min().down(),
 					bounds.max()
 			).spliterator(), false);
-		}).distinct().flatMap(pos -> {
+		}).map(BlockPos::toImmutable).distinct().flatMap(pos -> {
 			var state = world.getBlockState(pos);
 			var shape = state.getCollisionShape(world, pos);
 			if(shape.getBoundingBoxes().size() == 1){
@@ -101,7 +102,10 @@ public class FoodManager {
 	private SnakeFoodEntity spawnFood(Vec3d pos) {
 		var entity = SnakeFoodEntity.create(world);
 		entity.setPosition(pos);
-		entity.setYaw(random.nextFloat() * 360f);
+		var yaw = random.nextFloat() * 360f;
+		entity.setYaw(yaw);
+		entity.setHeadYaw(yaw);
+		entity.setBodyYaw(yaw);
 		world.spawnEntity(entity);
 		return entity;
 	}
