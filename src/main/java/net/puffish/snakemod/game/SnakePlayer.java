@@ -20,7 +20,8 @@ import java.util.Stack;
 
 public class SnakePlayer {
 	private static final int SEPARATION = 3;
-	private static final double SPEED = 5.0 / 9.0;
+	private static final float SPEED = 5.0f / 9.0f;
+	private static final float TURNING = 15.0f;
 
 	private final ServerWorld world;
 	private final ServerPlayerEntity player;
@@ -77,10 +78,12 @@ public class SnakePlayer {
 		int index = 0;
 		for (var entity : entities) {
 			if (index == 0) {
-				float yaw = player.getYaw();
+				float deltaYaw = MathHelper.subtractAngles(entity.getYaw(), player.getYaw());
+				float yaw = entity.getYaw() + MathHelper.clamp(deltaYaw, -TURNING, TURNING);
 
 				entity.setYaw(yaw);
 				entity.setHeadYaw(yaw);
+				entity.setBodyYaw(yaw);
 
 				if (move) {
 					entity.setVelocity(
@@ -109,6 +112,7 @@ public class SnakePlayer {
 
 				entity.setYaw(yaw);
 				entity.setHeadYaw(yaw);
+				entity.setBodyYaw(yaw);
 			}
 
 			index++;
@@ -197,6 +201,7 @@ public class SnakePlayer {
 		var entity = createPart(pos);
 		entity.setYaw(yaw);
 		entity.setHeadYaw(yaw);
+		entity.setBodyYaw(yaw);
 		return spawnPart(entity);
 	}
 
