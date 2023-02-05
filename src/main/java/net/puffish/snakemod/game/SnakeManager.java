@@ -53,6 +53,10 @@ public class SnakeManager {
 		Optional.ofNullable(snakes.remove(player)).ifPresent(SnakePlayer::remove);
 	}
 
+	public int getCount() {
+		return snakes.size();
+	}
+
 	public int getAliveCount() {
 		return (int) snakes.values()
 				.stream()
@@ -71,7 +75,7 @@ public class SnakeManager {
 		return Optional.ofNullable(snakes.get(player));
 	}
 
-	public Collection<SnakePlayer> getSnakes() {
-		return snakes.values();
+	public Collection<SnakePlayer> getAliveSnakes() {
+		return snakes.values().stream().filter(SnakePlayer::isAlive).toList();
 	}
 }

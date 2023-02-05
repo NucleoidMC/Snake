@@ -40,11 +40,8 @@ public class SnakeEndingPhase extends SnakeActivePhase {
 	}
 
 	private void start(){
-		snakeManager.getSnakes()
-				.stream()
-				.filter(SnakePlayer::isAlive)
-				.findFirst()
-				.ifPresent(winner -> gameSpace.getPlayers().sendMessage(
+		snakeManager.getAliveSnakes()
+				.forEach(winner -> gameSpace.getPlayers().sendMessage(
 						SnakeMod.createTranslatable(
 								"text",
 								"won",
@@ -55,13 +52,11 @@ public class SnakeEndingPhase extends SnakeActivePhase {
 
 	protected void tick() {
 		if (countdown % 20 == 0 || countdown % 20 == 15) {
-			snakeManager.getSnakes()
-					.stream()
-					.filter(SnakePlayer::isAlive)
+			snakeManager.getAliveSnakes()
 					.forEach(SnakePlayer::spawnFirework);
 		}
 
-		foodManager.tick(snakeManager.getSnakes());
+		foodManager.tick(snakeManager.getAliveSnakes());
 		snakeManager.tickPlaying((killer, killed) -> {});
 
 		super.tick();

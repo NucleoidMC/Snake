@@ -25,7 +25,7 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 				oldPhase.snakeManager,
 				oldPhase.foodManager,
 				oldPhase.scoreboardManager,
-				oldPhase.snakeManager.getSnakes().size() == 1 ? 1 : 2
+				oldPhase.snakeManager.getCount() == 1 ? 1 : 2
 		);
 	}
 
@@ -39,7 +39,7 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 	}
 
 	protected void tick() {
-		foodManager.tick(snakeManager.getSnakes());
+		foodManager.tick(snakeManager.getAliveSnakes());
 		snakeManager.tickPlaying(this::eliminate);
 
 		super.tick();

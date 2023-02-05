@@ -53,7 +53,7 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 	}
 
 	protected void tick() {
-		foodManager.tick(snakeManager.getSnakes());
+		foodManager.tick(snakeManager.getAliveSnakes());
 		snakeManager.tickStarting();
 
 		super.tick();
