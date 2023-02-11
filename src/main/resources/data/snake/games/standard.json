@@ -1,5 +1,6 @@
 {
 	"type": "snake:snake",
+	"icon": "minecraft:mud_brick_stairs",
 	"map": {
 		"id": "snake:standard"
 	},

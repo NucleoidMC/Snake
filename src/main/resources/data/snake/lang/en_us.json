@@ -1,4 +1,7 @@
 {
+	"game.snake.standard": "Snake: Standard",
+	"game.snake.catacombs": "Snake: Catacombs",
+
 	"gameType.snake.snake": "Snake",
 
 	"text.snake.eliminated": "%s§3 has been eliminated!",

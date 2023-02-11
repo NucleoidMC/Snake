@@ -1,5 +1,6 @@
 {
 	"type": "snake:snake",
+	"icon": "minecraft:chiseled_sandstone",
 	"map": {
 		"id": "snake:catacombs"
 	},
