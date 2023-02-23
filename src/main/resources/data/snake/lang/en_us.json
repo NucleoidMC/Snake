@@ -1,6 +1,7 @@
 {
 	"game.snake.standard": "Snake: Standard",
 	"game.snake.catacombs": "Snake: Catacombs",
+	"game.snake.racetrack": "Snake: Racetrack",
 
 	"gameType.snake.snake": "Snake",
 

@@ -1,0 +1,12 @@
+{
+	"type": "snake:snake",
+	"icon": "minecraft:deepslate_tile_stairs",
+	"map": {
+		"id": "snake:racetrack"
+	},
+	"players": {
+		"min": 1,
+		"max": 8,
+		"threshold": 4
+	}
+}
