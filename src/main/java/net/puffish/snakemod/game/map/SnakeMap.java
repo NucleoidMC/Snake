@@ -78,6 +78,10 @@ public class SnakeMap {
 		return foodSpawns;
 	}
 
+	public BlockBounds getBounds() {
+		return template.getBounds();
+	}
+
 	public ChunkGenerator createGenerator(MinecraftServer server) {
 		return new TemplateChunkGenerator(server, template);
 	}

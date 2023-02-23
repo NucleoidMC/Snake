@@ -7,14 +7,17 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.DyeColor;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.map.SnakeMap;
+import xyz.nucleoid.map_templates.BlockBounds;
 
 import java.util.*;
 
 public class SnakeManager {
 	private final Object2ObjectMap<ServerPlayerEntity, SnakePlayer> snakes;
+	private final BlockBounds bounds;
 
-	private SnakeManager(Object2ObjectMap<ServerPlayerEntity, SnakePlayer> snakes) {
+	private SnakeManager(Object2ObjectMap<ServerPlayerEntity, SnakePlayer> snakes, BlockBounds bounds) {
 		this.snakes = snakes;
+		this.bounds = bounds;
 	}
 
 	public static SnakeManager create(ServerWorld world, Collection<ServerPlayerEntity> players, SnakeMap map, Random random) {
@@ -37,7 +40,7 @@ public class SnakeManager {
 			index++;
 		}
 
-		return new SnakeManager(snakes);
+		return new SnakeManager(snakes, map.getBounds());
 	}
 
 	public void tickStarting() {
@@ -46,6 +49,7 @@ public class SnakeManager {
 
 	public void tickPlaying(EliminateCallback eliminateCallback) {
 		snakes.values().forEach(p -> p.checkCollisions(snakes.values(), eliminateCallback));
+		snakes.values().forEach(p -> p.checkBounds(bounds, eliminateCallback));
 		snakes.values().forEach(p -> p.tick(true));
 	}
 

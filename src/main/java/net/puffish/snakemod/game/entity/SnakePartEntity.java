@@ -42,13 +42,13 @@ public class SnakePartEntity extends SheepEntity {
 		this.velocityDirty = true;
 	}
 
+	public Vec3d getCenter() {
+		return getPos().add(0, getHeight() / 2.0, 0);
+	}
+
 	@Override
 	public void tick() {
 		this.baseTick();
-	}
-
-	public Vec3d getCenter() {
-		return getPos().add(0, getHeight(), 0);
 	}
 
 	@Override

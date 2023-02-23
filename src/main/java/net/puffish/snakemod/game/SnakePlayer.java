@@ -6,11 +6,13 @@ import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.entity.SnakePartEntity;
+import xyz.nucleoid.map_templates.BlockBounds;
 import xyz.nucleoid.plasmid.util.ItemStackBuilder;
 
 import java.util.ArrayList;
@@ -129,6 +131,17 @@ public class SnakePlayer {
 		}
 	}
 
+	public void checkBounds(BlockBounds bounds, EliminateCallback eliminateCallback) {
+		if (dead) {
+			return;
+		}
+
+		if (!bounds.contains(new BlockPos(getHeadPos()))) {
+			eliminateCallback.accept(this.player, this.player);
+			kill();
+		}
+	}
+
 	public void checkCollisions(Collection<SnakePlayer> otherSnakes, EliminateCallback eliminateCallback) {
 		if (dead) {
 			return;
@@ -138,28 +151,27 @@ public class SnakePlayer {
 			if (otherSnake.dead) {
 				continue;
 			}
-			if (checkCollision(otherSnake, eliminateCallback)) {
+			if (checkCollision(otherSnake)) {
+				if (this != otherSnake) {
+					otherSnake.kills++;
+				}
+				eliminateCallback.accept(otherSnake.player, this.player);
 				kill();
 				break;
 			}
 		}
 	}
 
-	private boolean checkCollision(SnakePlayer otherSnake, EliminateCallback eliminateCallback) {
+	private boolean checkCollision(SnakePlayer otherSnake) {
 		var minSquaredDistance = 4.0 * SnakePartEntity.RADIUS * SnakePartEntity.RADIUS;
 
-		int index = 0;
+		boolean first = true;
 		for (var entity : otherSnake.entities) {
-			if (this != otherSnake || index != 0) {
-				if (getHeadPos().squaredDistanceTo(entity.getCenter()) < minSquaredDistance) {
-					eliminateCallback.accept(otherSnake.player, this.player);
-					this.player.changeGameMode(GameMode.SPECTATOR);
-					otherSnake.kills++;
-					return true;
-				}
+			if (this == otherSnake && first) {
+				first = false;
+			} else if (getHeadPos().squaredDistanceTo(entity.getCenter()) < minSquaredDistance) {
+				return true;
 			}
-
-			index++;
 		}
 
 		return false;
@@ -169,6 +181,7 @@ public class SnakePlayer {
 		for (var entity : entities) {
 			entity.kill();
 		}
+		this.player.changeGameMode(GameMode.SPECTATOR);
 		this.dead = true;
 	}
 
