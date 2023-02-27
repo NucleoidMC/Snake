@@ -1,0 +1,12 @@
+{
+	"type": "snake:snake",
+	"icon": "minecraft:stone_stairs",
+	"map": {
+		"id": "snake:parking"
+	},
+	"players": {
+		"min": 1,
+		"max": 12,
+		"threshold": 4
+	}
+}
