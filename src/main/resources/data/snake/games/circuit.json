@@ -1,0 +1,12 @@
+{
+	"type": "snake:snake",
+	"icon": "minecraft:lime_terracotta",
+	"map": {
+		"id": "snake:circuit"
+	},
+	"players": {
+		"min": 1,
+		"max": 8,
+		"threshold": 4
+	}
+}
