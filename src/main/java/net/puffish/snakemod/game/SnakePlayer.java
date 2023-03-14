@@ -136,7 +136,7 @@ public class SnakePlayer {
 			return;
 		}
 
-		if (!bounds.contains(new BlockPos(getHeadPos()))) {
+		if (!bounds.contains(BlockPos.ofFloored(getHeadPos()))) {
 			eliminateCallback.accept(this.player, this.player);
 			kill();
 		}
