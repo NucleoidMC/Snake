@@ -1,9 +1,12 @@
 package net.puffish.snakemod.game.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.SlimeEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class SnakeFoodEntity extends SlimeEntity {
 	public static final double RADIUS = 0.5;
@@ -45,7 +48,7 @@ public class SnakeFoodEntity extends SlimeEntity {
 	}
 
 	@Override
-	public boolean shouldDropXp() {
-		return false;
+	protected void dropExperience(ServerWorld world, @Nullable Entity attacker) {
+
 	}
 }

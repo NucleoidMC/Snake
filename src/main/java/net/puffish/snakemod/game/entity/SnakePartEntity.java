@@ -1,11 +1,14 @@
 package net.puffish.snakemod.game.entity;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class SnakePartEntity extends SheepEntity {
 	public static final double RADIUS = 0.55;
@@ -67,7 +70,7 @@ public class SnakePartEntity extends SheepEntity {
 	}
 
 	@Override
-	public boolean shouldDropXp() {
-		return false;
+	protected void dropExperience(ServerWorld world, @Nullable Entity attacker) {
+
 	}
 }
