@@ -50,7 +50,7 @@ public class SnakePlayer {
 		var snakePlayer = new SnakePlayer(world, player, color);
 
 		var entity = snakePlayer.createAndSpawnPart(pos, player.getYaw());
-		player.startRiding(entity, true);
+		player.startRiding(entity, true, true);
 		snakePlayer.entities.push(entity);
 
 		return snakePlayer;
@@ -94,15 +94,15 @@ public class SnakePlayer {
 							MathHelper.cos(yaw * MathHelper.RADIANS_PER_DEGREE) * SPEED
 					);
 
-					path.addFirst(entity.getPos());
+					path.addFirst(entity.getEntityPos());
 				}
 			} else {
 				Vec3d target = path.get(index * SEPARATION - 1);
 
 				entity.setVelocity(
-						target.x - entity.getPos().x,
+						target.x - entity.getEntityPos().x,
 						entity.getVelocity().y,
-						target.z - entity.getPos().z
+						target.z - entity.getEntityPos().z
 				);
 
 				float yaw = MathHelper.wrapDegrees(

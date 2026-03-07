@@ -2,6 +2,7 @@ package net.puffish.snakemod.game.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
@@ -34,7 +35,7 @@ public class SnakeFoodEntity extends SlimeEntity {
 	}
 
 	public Vec3d getCenter() {
-		return getPos().add(0, getHeight(), 0);
+		return getEntityPos().add(0, getHeight(), 0);
 	}
 
 	@Override
@@ -42,12 +43,12 @@ public class SnakeFoodEntity extends SlimeEntity {
 		return false;
 	}
 
-	@Override
-	protected boolean shouldDropLoot() {
-		return false;
-	}
+    @Override
+    protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
 
-	@Override
+    }
+
+    @Override
 	protected void dropExperience(ServerWorld world, @Nullable Entity attacker) {
 
 	}

@@ -3,6 +3,7 @@ package net.puffish.snakemod.game.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -46,7 +47,7 @@ public class SnakePartEntity extends SheepEntity {
 	}
 
 	public Vec3d getCenter() {
-		return getPos().add(0, getHeight() / 2.0, 0);
+		return getEntityPos().add(0, getHeight() / 2.0, 0);
 	}
 
 	@Override
@@ -64,12 +65,12 @@ public class SnakePartEntity extends SheepEntity {
 		return false;
 	}
 
-	@Override
-	protected boolean shouldDropLoot() {
-		return false;
-	}
+    @Override
+    protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
 
-	@Override
+    }
+
+    @Override
 	protected void dropExperience(ServerWorld world, @Nullable Entity attacker) {
 
 	}
