@@ -93,7 +93,7 @@ public class SnakeWaitingPhase extends SnakePhase {
 
 	private void tick() {
 		gameSpace.getPlayers().forEach(player -> {
-			if(!map.getBounds().contains(BlockPos.ofFloored(player.getPos()))){
+			if(!map.getBounds().contains(BlockPos.ofFloored(player.getEntityPos()))){
 				Vec3d pos = getRandomWaitingSpawn();
 				player.teleport(pos.x, pos.y, pos.z, false);
 			}

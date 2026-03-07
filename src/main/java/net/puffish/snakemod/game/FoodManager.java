@@ -86,7 +86,7 @@ public class FoodManager {
 			var pos = snake.getHeadPos();
 
 			if (entity.getCenter().squaredDistanceTo(pos) < minSquaredDistance) {
-				positions.add(entity.getPos());
+				positions.add(entity.getEntityPos());
 				entity.remove(Entity.RemovalReason.DISCARDED);
 				snake.grow();
 
