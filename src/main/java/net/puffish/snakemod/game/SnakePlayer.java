@@ -1,15 +1,15 @@
 package net.puffish.snakemod.game;
 
-import net.minecraft.component.type.FireworkExplosionComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.GameType;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.entity.SnakePartEntity;
 import xyz.nucleoid.map_templates.BlockBounds;
@@ -25,18 +25,18 @@ public class SnakePlayer {
 	private static final float SPEED = 5.0f / 9.0f;
 	private static final float TURNING = 15.0f;
 
-	private final ServerWorld world;
-	private final ServerPlayerEntity player;
+	private final ServerLevel level;
+	private final ServerPlayer player;
 	private final DyeColor color;
-	private final LinkedList<Vec3d> path;
+	private final LinkedList<Vec3> path;
 	private final Stack<SnakePartEntity> entities;
 
 	private int length;
 	private int kills;
 	private boolean dead;
 
-	private SnakePlayer(ServerWorld world, ServerPlayerEntity player, DyeColor color) {
-		this.world = world;
+	private SnakePlayer(ServerLevel level, ServerPlayer player, DyeColor color) {
+		this.level = level;
 		this.player = player;
 		this.color = color;
 		this.path = new LinkedList<>();
@@ -46,17 +46,17 @@ public class SnakePlayer {
 		this.dead = false;
 	}
 
-	public static SnakePlayer setup(ServerWorld world, ServerPlayerEntity player, DyeColor color, Vec3d pos) {
-		var snakePlayer = new SnakePlayer(world, player, color);
+	public static SnakePlayer setup(ServerLevel level, ServerPlayer player, DyeColor color, Vec3 pos) {
+		var snakePlayer = new SnakePlayer(level, player, color);
 
-		var entity = snakePlayer.createAndSpawnPart(pos, player.getYaw());
+		var entity = snakePlayer.createAndSpawnPart(pos, player.getYRot());
 		player.startRiding(entity, true, true);
 		snakePlayer.entities.push(entity);
 
 		return snakePlayer;
 	}
 
-	public Vec3d getHeadPos() {
+	public Vec3 getHeadPos() {
 		return entities.firstElement().getCenter();
 	}
 
@@ -80,41 +80,41 @@ public class SnakePlayer {
 		int index = 0;
 		for (var entity : entities) {
 			if (index == 0) {
-				float deltaYaw = MathHelper.subtractAngles(entity.getYaw(), player.getYaw());
-				float yaw = entity.getYaw() + MathHelper.clamp(deltaYaw, -TURNING, TURNING);
+				float deltaYaw = Mth.degreesDifference(entity.getYRot(), player.getYRot());
+				float yaw = entity.getYRot() + Mth.clamp(deltaYaw, -TURNING, TURNING);
 
-				entity.setYaw(yaw);
-				entity.setHeadYaw(yaw);
-				entity.setBodyYaw(yaw);
+				entity.setYRot(yaw);
+				entity.setYHeadRot(yaw);
+				entity.setYBodyRot(yaw);
 
 				if (move) {
-					entity.setVelocity(
-							-MathHelper.sin(yaw * MathHelper.RADIANS_PER_DEGREE) * SPEED,
-							entity.getVelocity().y,
-							MathHelper.cos(yaw * MathHelper.RADIANS_PER_DEGREE) * SPEED
+					entity.setDeltaMovement(
+							-Mth.sin(yaw * Mth.DEG_TO_RAD) * SPEED,
+							entity.getDeltaMovement().y,
+							Mth.cos(yaw * Mth.DEG_TO_RAD) * SPEED
 					);
 
-					path.addFirst(entity.getEntityPos());
+					path.addFirst(entity.position());
 				}
 			} else {
-				Vec3d target = path.get(index * SEPARATION - 1);
+				Vec3 target = path.get(index * SEPARATION - 1);
 
-				entity.setVelocity(
-						target.x - entity.getEntityPos().x,
-						entity.getVelocity().y,
-						target.z - entity.getEntityPos().z
+				entity.setDeltaMovement(
+						target.x - entity.position().x,
+						entity.getDeltaMovement().y,
+						target.z - entity.position().z
 				);
 
-				float yaw = MathHelper.wrapDegrees(
-						(float) MathHelper.atan2(
-								entity.getVelocity().z,
-								entity.getVelocity().x
-						) * MathHelper.DEGREES_PER_RADIAN
+				float yaw = Mth.wrapDegrees(
+						(float) Mth.atan2(
+								entity.getDeltaMovement().z,
+								entity.getDeltaMovement().x
+						) * Mth.RAD_TO_DEG
 				) - 90.0f;
 
-				entity.setYaw(yaw);
-				entity.setHeadYaw(yaw);
-				entity.setBodyYaw(yaw);
+				entity.setYRot(yaw);
+				entity.setYHeadRot(yaw);
+				entity.setYBodyRot(yaw);
 			}
 
 			index++;
@@ -136,7 +136,7 @@ public class SnakePlayer {
 			return;
 		}
 
-		if (!bounds.contains(BlockPos.ofFloored(getHeadPos()))) {
+		if (!bounds.contains(BlockPos.containing(getHeadPos()))) {
 			eliminateCallback.accept(this.player, this.player);
 			kill();
 		}
@@ -169,7 +169,7 @@ public class SnakePlayer {
 		for (var entity : otherSnake.entities) {
 			if (this == otherSnake && first) {
 				first = false;
-			} else if (getHeadPos().squaredDistanceTo(entity.getCenter()) < minSquaredDistance) {
+			} else if (getHeadPos().distanceToSqr(entity.getCenter()) < minSquaredDistance) {
 				return true;
 			}
 		}
@@ -179,9 +179,9 @@ public class SnakePlayer {
 
 	private void kill() {
 		for (var entity : entities) {
-			entity.kill(this.world);
+			entity.kill(this.level);
 		}
-		this.player.changeGameMode(GameMode.SPECTATOR);
+		this.player.setGameMode(GameType.SPECTATOR);
 		this.dead = true;
 	}
 
@@ -193,32 +193,32 @@ public class SnakePlayer {
 
 	public void spawnFirework() {
 		var pos = getHeadPos();
-		var item = ItemStackBuilder.firework(color.getFireworkColor(), 1, FireworkExplosionComponent.Type.SMALL_BALL).build();
-		var entity = new FireworkRocketEntity(world, pos.x, pos.y, pos.z, item);
-		world.spawnEntity(entity);
+		var item = ItemStackBuilder.firework(color.getFireworkColor(), 1, FireworkExplosion.Shape.SMALL_BALL).build();
+		var entity = new FireworkRocketEntity(level, pos.x, pos.y, pos.z, item);
+		level.addFreshEntity(entity);
 	}
 
-	private SnakePartEntity createPart(Vec3d pos) {
-		var entity = SnakePartEntity.create(world);
+	private SnakePartEntity createPart(Vec3 pos) {
+		var entity = SnakePartEntity.create(level);
 		entity.setColor(color);
-		entity.setPosition(pos);
+		entity.setPos(pos);
 		return entity;
 	}
 
 	private SnakePartEntity spawnPart(SnakePartEntity entity) {
-		world.spawnEntity(entity);
+		level.addFreshEntity(entity);
 		return entity;
 	}
 
-	private SnakePartEntity createAndSpawnPart(Vec3d pos, float yaw) {
+	private SnakePartEntity createAndSpawnPart(Vec3 pos, float yaw) {
 		var entity = createPart(pos);
-		entity.setYaw(yaw);
-		entity.setHeadYaw(yaw);
-		entity.setBodyYaw(yaw);
+		entity.setYRot(yaw);
+		entity.setYHeadRot(yaw);
+		entity.setYBodyRot(yaw);
 		return spawnPart(entity);
 	}
 
-	public ServerPlayerEntity getPlayer() {
+	public ServerPlayer getPlayer() {
 		return player;
 	}
 

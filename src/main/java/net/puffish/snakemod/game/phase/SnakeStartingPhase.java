@@ -1,9 +1,9 @@
 package net.puffish.snakemod.game.phase;
 
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.ChatFormatting;
 import net.puffish.snakemod.SnakeMod;
 import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
@@ -16,12 +16,12 @@ import java.util.Random;
 public class SnakeStartingPhase extends SnakeActivePhase {
 	private int countdown = 4 * 20;
 
-	protected SnakeStartingPhase(GameSpace gameSpace, ServerWorld world, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager) {
-		super(gameSpace, world, map, snakeManager, foodManager, scoreboardManager);
+	protected SnakeStartingPhase(GameSpace gameSpace, ServerLevel level, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager) {
+		super(gameSpace, level, map, snakeManager, foodManager, scoreboardManager);
 	}
 
 	public static SnakeStartingPhase create(GameSpace gameSpace, SnakeWaitingPhase oldPhase) {
-		var world = oldPhase.world;
+		var level = oldPhase.level;
 		var map = oldPhase.map;
 
 		var random = new Random();
@@ -30,13 +30,13 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 				.stream()
 				.toList();
 
-		var snakeManager = SnakeManager.create(world, players, map, random);
-		var foodManager = FoodManager.create(world, map, random, 0.01f);
+		var snakeManager = SnakeManager.create(level, players, map, random);
+		var foodManager = FoodManager.create(level, map, random, 0.01f);
 		var scoreboardManager = ScoreboardManager.create();
 
 		return new SnakeStartingPhase(
 				gameSpace,
-				world,
+				level,
 				map,
 				snakeManager,
 				foodManager,
@@ -67,8 +67,8 @@ public class SnakeStartingPhase extends SnakeActivePhase {
 				players.showTitle(SnakeMod.createTranslatable(
 						"text",
 						"countdown." + seconds
-				).formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD), 10, 20, 10);
-				players.playSound(SoundEvents.BLOCK_NOTE_BLOCK_PLING.value(), SoundCategory.PLAYERS, 1.0f, seconds == 0 ? 2.0f : 1.0f);
+				).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD), 10, 20, 10);
+				players.playSound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1.0f, seconds == 0 ? 2.0f : 1.0f);
 			}
 			if (seconds == 0) {
 				SnakePlayingPhase.open(this);
