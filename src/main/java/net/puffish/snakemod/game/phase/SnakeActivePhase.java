@@ -1,10 +1,10 @@
 package net.puffish.snakemod.game.phase;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.GameMode;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.GameType;
 import net.puffish.snakemod.SnakeMod;
 import net.puffish.snakemod.event.SnakeEvents;
 import net.puffish.snakemod.game.FoodManager;
@@ -26,8 +26,8 @@ public abstract class SnakeActivePhase extends SnakePhase {
 
 	protected final Random random = new Random();
 
-	protected SnakeActivePhase(GameSpace gameSpace, ServerWorld world, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager) {
-		super(gameSpace, world, map);
+	protected SnakeActivePhase(GameSpace gameSpace, ServerLevel level, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager) {
+		super(gameSpace, level, map);
 		this.snakeManager = snakeManager;
 		this.foodManager = foodManager;
 		this.scoreboardManager = scoreboardManager;
@@ -46,27 +46,27 @@ public abstract class SnakeActivePhase extends SnakePhase {
 			var optSnake = snakeManager.getSnake(player);
 			builder.add(
 					SnakeMod.createTranslatable("sidebar", "alive")
-							.formatted(Formatting.BOLD, Formatting.GREEN),
-					Text.literal(Integer.toString(snakeManager.getAliveCount()))
-							.formatted(Formatting.WHITE)
+							.withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN),
+					Component.literal(Integer.toString(snakeManager.getAliveCount()))
+							.withStyle(ChatFormatting.WHITE)
 			);
 			builder.add(
 					SnakeMod.createTranslatable("sidebar", "dead")
-							.formatted(Formatting.BOLD, Formatting.RED),
-					Text.literal(Integer.toString(snakeManager.getDeadCount()))
-							.formatted(Formatting.WHITE)
+							.withStyle(ChatFormatting.BOLD, ChatFormatting.RED),
+					Component.literal(Integer.toString(snakeManager.getDeadCount()))
+							.withStyle(ChatFormatting.WHITE)
 			);
 			optSnake.ifPresent(snake -> {
 				builder.add(
 						SnakeMod.createTranslatable("sidebar", "kills")
-								.formatted(Formatting.BOLD, Formatting.YELLOW),
-						Text.literal(Integer.toString(snake.getKills()))
-								.formatted(Formatting.WHITE));
+								.withStyle(ChatFormatting.BOLD, ChatFormatting.YELLOW),
+						Component.literal(Integer.toString(snake.getKills()))
+								.withStyle(ChatFormatting.WHITE));
 				builder.add(
 						SnakeMod.createTranslatable("sidebar", "length")
-								.formatted(Formatting.BOLD, Formatting.AQUA),
-						Text.literal(Integer.toString(snake.getLength()))
-								.formatted(Formatting.WHITE)
+								.withStyle(ChatFormatting.BOLD, ChatFormatting.AQUA),
+						Component.literal(Integer.toString(snake.getLength()))
+								.withStyle(ChatFormatting.WHITE)
 				);
 			});
 		});
@@ -74,20 +74,20 @@ public abstract class SnakeActivePhase extends SnakePhase {
 
 	private JoinAcceptorResult acceptPlayer(JoinAcceptor acceptor) {
 		return acceptor.teleport(
-				this.world,
+				this.level,
 				this.map.getWaitingSpawns().get(random.nextInt(map.getWaitingSpawns().size()))
-		).thenRunForEach(player -> player.changeGameMode(GameMode.SPECTATOR));
+		).thenRunForEach(player -> player.setGameMode(GameType.SPECTATOR));
 	}
 
-	protected void leavePlayer(ServerPlayerEntity player) {
+	protected void leavePlayer(ServerPlayer player) {
 		snakeManager.removePlayer(player);
 	}
 
-	protected void addPlayer(ServerPlayerEntity player) {
+	protected void addPlayer(ServerPlayer player) {
 		scoreboardManager.addPlayer(player);
 	}
 
-	protected void removePlayer(ServerPlayerEntity player) {
+	protected void removePlayer(ServerPlayer player) {
 		scoreboardManager.removePlayer(player);
 	}
 }

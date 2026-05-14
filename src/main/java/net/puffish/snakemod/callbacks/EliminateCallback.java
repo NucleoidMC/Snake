@@ -1,7 +1,7 @@
 package net.puffish.snakemod.callbacks;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 public interface EliminateCallback {
-	void accept(ServerPlayerEntity killer, ServerPlayerEntity killed);
+	void accept(ServerPlayer killer, ServerPlayer killed);
 }

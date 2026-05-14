@@ -1,9 +1,9 @@
 package net.puffish.snakemod.game.phase;
 
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import net.puffish.snakemod.SnakeMod;
 import net.puffish.snakemod.game.FoodManager;
 import net.puffish.snakemod.game.ScoreboardManager;
@@ -14,15 +14,15 @@ import xyz.nucleoid.plasmid.api.game.GameSpace;
 public class SnakePlayingPhase extends SnakeActivePhase {
 	private final int minAliveCount;
 
-	public SnakePlayingPhase(GameSpace gameSpace, ServerWorld world, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager, int minAliveCount) {
-		super(gameSpace, world, map, snakeManager, foodManager, scoreboardManager);
+	public SnakePlayingPhase(GameSpace gameSpace, ServerLevel level, SnakeMap map, SnakeManager snakeManager, FoodManager foodManager, ScoreboardManager scoreboardManager, int minAliveCount) {
+		super(gameSpace, level, map, snakeManager, foodManager, scoreboardManager);
 		this.minAliveCount = minAliveCount;
 	}
 
 	public static SnakePlayingPhase create(GameSpace gameSpace, SnakeActivePhase oldPhase) {
 		return new SnakePlayingPhase(
 				gameSpace,
-				oldPhase.world,
+				oldPhase.level,
 				oldPhase.map,
 				oldPhase.snakeManager,
 				oldPhase.foodManager,
@@ -51,23 +51,23 @@ public class SnakePlayingPhase extends SnakeActivePhase {
 		}
 	}
 
-	private void eliminate(ServerPlayerEntity killer, ServerPlayerEntity player) {
+	private void eliminate(ServerPlayer killer, ServerPlayer player) {
 		if (killer == player) {
 			gameSpace.getPlayers().sendMessage(
 					SnakeMod.createTranslatable(
 							"text",
 							"eliminated",
-							Text.empty().formatted(Formatting.WHITE).append(player.getDisplayName())
-					).formatted(Formatting.DARK_AQUA)
+							Component.empty().withStyle(ChatFormatting.WHITE).append(player.getDisplayName())
+					).withStyle(ChatFormatting.DARK_AQUA)
 			);
 		} else {
 			gameSpace.getPlayers().sendMessage(
 					SnakeMod.createTranslatable(
 							"text",
 							"eliminated.by",
-							Text.empty().formatted(Formatting.WHITE).append(player.getDisplayName()),
-							Text.empty().formatted(Formatting.WHITE).append(killer.getDisplayName())
-					).formatted(Formatting.DARK_AQUA)
+							Component.empty().withStyle(ChatFormatting.WHITE).append(player.getDisplayName()),
+							Component.empty().withStyle(ChatFormatting.WHITE).append(killer.getDisplayName())
+					).withStyle(ChatFormatting.DARK_AQUA)
 			);
 		}
 	}

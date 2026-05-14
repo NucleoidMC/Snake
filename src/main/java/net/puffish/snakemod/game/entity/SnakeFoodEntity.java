@@ -1,32 +1,32 @@
 package net.puffish.snakemod.game.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class SnakeFoodEntity extends SlimeEntity {
+public class SnakeFoodEntity extends Slime {
 	public static final double RADIUS = 0.5;
 
-	protected SnakeFoodEntity(World world) {
-		super(EntityType.SLIME, world);
+	protected SnakeFoodEntity(Level level) {
+		super(EntityType.SLIME, level);
 	}
 
-	public static SnakeFoodEntity create(World world){
-		var entity = new SnakeFoodEntity(world);
+	public static SnakeFoodEntity create(Level level){
+		var entity = new SnakeFoodEntity(level);
 		entity.init();
 		return entity;
 	}
 
 	protected void init(){
-		this.goalSelector.getGoals().clear();
+		this.goalSelector.getAvailableGoals().clear();
 		this.setInvulnerable(true);
-		this.setAiDisabled(true);
-		this.setPersistent();
+		this.setNoAi(true);
+		this.setPersistenceRequired();
 	}
 
 	@Override
@@ -34,8 +34,8 @@ public class SnakeFoodEntity extends SlimeEntity {
 
 	}
 
-	public Vec3d getCenter() {
-		return getEntityPos().add(0, getHeight(), 0);
+	public Vec3 getCenter() {
+		return position().add(0, getBbHeight(), 0);
 	}
 
 	@Override
@@ -44,12 +44,12 @@ public class SnakeFoodEntity extends SlimeEntity {
 	}
 
     @Override
-    protected void dropLoot(ServerWorld world, DamageSource damageSource, boolean causedByPlayer) {
+    protected void dropFromLootTable(ServerLevel level, DamageSource damageSource, boolean causedByPlayer) {
 
     }
 
     @Override
-	protected void dropExperience(ServerWorld world, @Nullable Entity attacker) {
+	protected void dropExperience(ServerLevel level, @Nullable Entity attacker) {
 
 	}
 }

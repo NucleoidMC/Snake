@@ -2,9 +2,9 @@ package net.puffish.snakemod.game;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.DyeColor;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.DyeColor;
 import net.puffish.snakemod.callbacks.EliminateCallback;
 import net.puffish.snakemod.game.map.SnakeMap;
 import xyz.nucleoid.map_templates.BlockBounds;
@@ -12,16 +12,16 @@ import xyz.nucleoid.map_templates.BlockBounds;
 import java.util.*;
 
 public class SnakeManager {
-	private final Object2ObjectMap<ServerPlayerEntity, SnakePlayer> snakes;
+	private final Object2ObjectMap<ServerPlayer, SnakePlayer> snakes;
 	private final BlockBounds bounds;
 
-	private SnakeManager(Object2ObjectMap<ServerPlayerEntity, SnakePlayer> snakes, BlockBounds bounds) {
+	private SnakeManager(Object2ObjectMap<ServerPlayer, SnakePlayer> snakes, BlockBounds bounds) {
 		this.snakes = snakes;
 		this.bounds = bounds;
 	}
 
-	public static SnakeManager create(ServerWorld world, Collection<ServerPlayerEntity> players, SnakeMap map, Random random) {
-		var snakes = new Object2ObjectOpenHashMap<ServerPlayerEntity, SnakePlayer>();
+	public static SnakeManager create(ServerLevel level, Collection<ServerPlayer> players, SnakeMap map, Random random) {
+		var snakes = new Object2ObjectOpenHashMap<ServerPlayer, SnakePlayer>();
 
 		var spawns = new ArrayList<>(map.getSpawns());
 		Collections.shuffle(spawns, random);
@@ -32,7 +32,7 @@ public class SnakeManager {
 		int index = 0;
 		for (var player : players) {
 			snakes.put(player, SnakePlayer.setup(
-					world,
+					level,
 					player,
 					colors.get(index % colors.size()),
 					spawns.get(index)
@@ -53,7 +53,7 @@ public class SnakeManager {
 		snakes.values().forEach(p -> p.tick(true));
 	}
 
-	public void removePlayer(ServerPlayerEntity player) {
+	public void removePlayer(ServerPlayer player) {
 		Optional.ofNullable(snakes.remove(player)).ifPresent(SnakePlayer::remove);
 	}
 
@@ -75,7 +75,7 @@ public class SnakeManager {
 				.count();
 	}
 
-	public Optional<SnakePlayer> getSnake(ServerPlayerEntity player) {
+	public Optional<SnakePlayer> getSnake(ServerPlayer player) {
 		return Optional.ofNullable(snakes.get(player));
 	}
 
