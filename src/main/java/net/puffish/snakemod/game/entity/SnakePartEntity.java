@@ -2,6 +2,7 @@ package net.puffish.snakemod.game.entity;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.animal.sheep.Sheep;
@@ -15,7 +16,7 @@ public class SnakePartEntity extends Sheep {
 	public static final double RADIUS = 0.55;
 
 	protected SnakePartEntity(Level level) {
-		super(EntityType.SHEEP, level);
+		super(EntityTypes.SHEEP, level);
 	}
 
 	public static SnakePartEntity create(Level level){
