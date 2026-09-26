@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.GameType;
 import net.puffish.snakemod.config.SnakeConfig;
@@ -89,7 +90,7 @@ public class SnakeWaitingPhase extends SnakePhase {
 		gameSpace.getPlayers().forEach(player -> {
 			if(!map.getBounds().contains(BlockPos.containing(player.position()))){
 				Vec3 pos = getRandomWaitingSpawn();
-				player.randomTeleport(pos.x, pos.y, pos.z, false);
+				player.randomTeleport(pos.x, pos.y, pos.z, false, BlockTags.DANGEROUS_FOR_TELEPORTATION);
 			}
 		});
 	}

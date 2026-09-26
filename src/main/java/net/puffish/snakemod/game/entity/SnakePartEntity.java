@@ -27,7 +27,7 @@ public class SnakePartEntity extends Sheep {
 
 	protected void init(){
 		this.goalSelector.getAvailableGoals().clear();
-		this.setInvulnerable(true);
+		this.setPermanentlyInvulnerable(true);
 		this.setPersistenceRequired();
 	}
 
